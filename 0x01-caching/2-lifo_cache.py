@@ -22,7 +22,7 @@ class LIFOCache(BaseCaching):
         if key is not None and item is not None:
             if len(self.cache_data) >= self.MAX_ITEMS:
                 # Discard the last item put in cache (LIFO)
-                discarded_key = next(reversed(self.cache_data))
+                discarded_key = list(self.cache_data.keys())[-1]
                 del self.cache_data[discarded_key]
                 print("DISCARD:", discarded_key)
             self.cache_data[key] = item
