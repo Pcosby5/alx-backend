@@ -42,9 +42,10 @@ class MRUCache(BaseCaching):
             The cached item if found, otherwise None.
         """
         if key is not None:
-            if key in self.cache_data:
+            cached_item = self.cache_data.get(key)
+            if cached_item is not None:
                 # Move the key to the end of the cache_data
                 # dictionary to indicate it's the most recently used
-                self.cache_data[key] = self.cache_data.pop(key)
-                return self.cache_data[key]
+                self.cache_data[key] = cached_item
+            return cached_item
         return None
