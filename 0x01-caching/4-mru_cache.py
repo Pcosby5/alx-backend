@@ -19,13 +19,18 @@ class MRUCache(BaseCaching):
             key: The key for the item.
             item: The item to be cached.
         """
-        if key is not None and item is not None:
-            if len(self.cache_data) >= self.MAX_ITEMS:
-                # Discard the most recently used item (MRU)
-                discarded_key = next(reversed(self.cache_data))
-                del self.cache_data[discarded_key]
-                print("DISCARD:", discarded_key)
-            self.cache_data[key] = item
+        if key is None or item is None:
+            return
+
+        if len(self.cache_data) >= self.MAX_ITEMS:
+            # Discard the most recently used item (MRU)
+            discarded_key = list(self.cache_data.keys())[0]
+            del self.cache_data[discarded_key]
+            print("DISCARD:", discarded_key)
+
+        self.cache_data[key] = item
+        self.cache_data = {k: v for k, v in sorted(
+            self.cache_data.items(), key=lambda x: x[1] is None)}
 
     def get(self, key):
         """Get an item from the cache.
