@@ -11,6 +11,7 @@ class MRUCache(BaseCaching):
     def __init__(self):
         """Initialize the MRUCache."""
         super().__init__()
+        self.most_recently_used = None
 
     def put(self, key, item):
         """Add an item to the cache using MRU algorithm.
@@ -22,15 +23,16 @@ class MRUCache(BaseCaching):
         if key is None or item is None:
             return
 
-        if len(self.cache_data) >= self.MAX_ITEMS:
-            # Discard the most recently used item (MRU)
-            discarded_key = list(self.cache_data.keys())[0]
-            del self.cache_data[discarded_key]
-            print("DISCARD:", discarded_key)
+        if key in self.cache_data:
+            self.cache_data[key] = item
+        else:
+            if len(self.cache_data) >= self.MAX_ITEMS:
+                if self.most_recently_used is not None:
+                    print("DISCARD:", self.most_recently_used)
+                    del self.cache_data[self.most_recently_used]
+            self.cache_data[key] = item
 
-        self.cache_data[key] = item
-        self.cache_data = {k: v for k, v in sorted(
-            self.cache_data.items(), key=lambda x: x[1] is None)}
+        self.most_recently_used = key
 
     def get(self, key):
         """Get an item from the cache.
@@ -41,11 +43,7 @@ class MRUCache(BaseCaching):
         Returns:
             The cached item if found, otherwise None.
         """
-        if key is not None:
-            cached_item = self.cache_data.get(key)
-            if cached_item is not None:
-                # Move the key to the end of the cache_data
-                # dictionary to indicate it's the most recently used
-                self.cache_data[key] = cached_item
-            return cached_item
+        if key is not None and key in self.cache_data:
+            self.most_recently_used = key
+            return self.cache_data[key]
         return None
