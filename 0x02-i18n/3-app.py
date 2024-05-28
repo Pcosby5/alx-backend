@@ -7,7 +7,7 @@ from flask import Flask, render_template, request
 from flask_babel import Babel, _
 
 
-class Config:
+class Config(object):
     """
     Configuration class for Flask application.
     """
