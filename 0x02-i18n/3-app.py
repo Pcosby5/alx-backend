@@ -4,7 +4,7 @@ This module sets up a basic Flask application with Babel for i18n support.
 """
 
 from flask import Flask, render_template, request
-from flask_babel import Babel, _
+from flask_babel import Babel
 
 
 class Config(object):
@@ -45,4 +45,4 @@ def index() -> str:
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run
